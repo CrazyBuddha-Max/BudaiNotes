@@ -1,0 +1,410 @@
+@import '@astryxdesign/core/reset.css';
+@import '@astryxdesign/core/astryx.css';
+@import '@astryxdesign/theme-neutral/theme.css';
+
+:root {
+  --buda-accent-1: #6ee7ff;
+  --buda-accent-2: #a78bfa;
+  --buda-accent-3: #f472b6;
+  --buda-glow: rgba(167, 139, 250, 0.45);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: transparent;
+  font-family: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- animated aurora backdrop ---- */
+.buda-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background: var(--color-background-canvas, #f4f4f6);
+  transition: background 0.3s ease;
+}
+
+.buda-backdrop::before,
+.buda-backdrop::after {
+  content: '';
+  position: absolute;
+  width: 60vw;
+  height: 60vw;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.5;
+  animation: buda-drift 18s ease-in-out infinite alternate;
+}
+
+.buda-backdrop::before {
+  top: -25vw;
+  left: -15vw;
+  background: radial-gradient(circle, var(--buda-accent-1), transparent 70%);
+}
+
+.buda-backdrop::after {
+  bottom: -30vw;
+  right: -20vw;
+  background: radial-gradient(circle, var(--buda-accent-3), transparent 70%);
+  animation-delay: -9s;
+}
+
+@keyframes buda-drift {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    transform: translate(8vw, -6vw) scale(1.15);
+  }
+}
+
+/* ---- glass note cards ---- */
+.buda-note-card {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.25s ease;
+  animation: buda-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.buda-note-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px -18px var(--buda-glow);
+}
+
+.buda-note-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    transparent 30%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 70%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.7s ease;
+  pointer-events: none;
+}
+
+.buda-note-card:hover::after {
+  transform: translateX(120%);
+}
+
+.buda-accent-line {
+  height: 3px;
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    var(--buda-accent-1),
+    var(--buda-accent-2),
+    var(--buda-accent-3)
+  );
+  background-size: 200% 100%;
+  animation: buda-slide 6s linear infinite;
+}
+
+@keyframes buda-slide {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes buda-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ---- entrance fade for panels ---- */
+.buda-fade {
+  animation: buda-rise 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ---- custom scrollbar ---- */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 140, 170, 0.35);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 140, 170, 0.55);
+  background-clip: padding-box;
+}
+
+/* ---- tag chips in the editor ---- */
+.buda-tag-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6d28d9;
+  background: rgba(167, 139, 250, 0.18);
+  border: 1px solid rgba(167, 139, 250, 0.4);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.buda-tag-chip:hover {
+  background: rgba(167, 139, 250, 0.32);
+}
+
+.buda-tag-chip .buda-tag-remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: rgba(109, 40, 217, 0.15);
+  line-height: 1;
+  font-size: 13px;
+  color: #6d28d9;
+}
+
+.buda-tag-input {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--color-border-default, #e5e4e7);
+  background: var(--color-surface-elevated, #fff);
+  min-height: 42px;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.buda-tag-input:focus-within {
+  border-color: var(--color-accent-default, #6d28d9);
+  box-shadow: 0 0 0 3px rgba(167, 139, 250, 0.2);
+}
+
+.buda-tag-input input {
+  flex: 1;
+  min-width: 80px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font: inherit;
+  font-size: 14px;
+  color: var(--color-text-primary, #1a1a22);
+}
+
+/* ---- content preview ---- */
+.buda-preview {
+  white-space: pre-wrap;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.buda-stats-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.buda-stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.buda-stat .buda-stat-value {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(
+    90deg,
+    var(--buda-accent-1),
+    var(--buda-accent-2),
+    var(--buda-accent-3)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- full-page markdown editor ---- */
+.buda-toolbar-cards {
+  display: flex;
+  flex-direction: column;
+}
+
+.buda-editor-card,
+.buda-preview-card {
+  display: flex;
+  min-height: 460px;
+}
+
+.buda-md-editor {
+  font-family: 'SFMono-Regular', ui-monospace, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  font-size: 13.5px;
+  line-height: 1.75;
+  width: 100%;
+  min-height: 460px;
+  padding: 18px 20px;
+  border: none;
+  outline: none;
+  resize: vertical;
+  background: transparent;
+  color: var(--color-text-primary, #1a1a22);
+  tab-size: 2;
+}
+
+/* ---- CodeMirror 6 editor ---- */
+.buda-md-wrap {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+.buda-md-cm {
+  flex: 1;
+  min-width: 0;
+}
+.buda-md-cm .cm-editor {
+  font-family: 'SFMono-Regular', ui-monospace, 'SF Mono', Menlo, Consolas,
+    'Liberation Mono', monospace;
+  font-size: 14px;
+  height: clamp(460px, 60vh, 680px);
+  background: transparent;
+  color: var(--color-text-primary, #1a1a22);
+}
+.buda-md-cm .cm-editor .cm-scroller {
+  overflow: auto;
+  line-height: 1.9;
+}
+.buda-md-cm .cm-editor .cm-content {
+  padding: 20px 24px;
+  caret-color: var(--color-text-primary, #1a1a22);
+}
+.buda-md-cm .cm-editor .cm-gutters {
+  background: transparent;
+  border-right: 1px solid
+    var(--color-border-default, rgba(0, 0, 0, 0.08));
+  color: var(--color-text-tertiary, #94a3b8);
+}
+.buda-md-cm .cm-editor .cm-activeLine {
+  background: transparent;
+}
+.buda-md-cm .cm-editor .cm-activeLineGutter {
+  background: transparent;
+}
+.buda-md-cm .cm-editor .cm-selectionBackground,
+.buda-md-cm .cm-editor.cm-focused .cm-selectionBackground {
+  background: var(--buda-accent-3, rgba(244, 114, 182, 0.25));
+}
+.buda-md-cm .cm-editor .cm-placeholder {
+  color: var(--color-text-tertiary, #94a3b8);
+}
+
+.buda-md-preview {
+  width: 100%;
+  min-height: 460px;
+  padding: 18px 24px;
+  overflow-x: auto;
+  background: transparent;
+  color: var(--color-text-primary, #1a1a22);
+}
+
+.buda-md-preview :is(h1, h2, h3, h4) {
+  margin-top: 1.2em;
+}
+
+.buda-preview-card .buda-md-preview {
+  border-left: 2px solid
+    var(--color-border-default, rgba(0, 0, 0, 0.1));
+}
+
+.buda-md-editor::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* ---- editor status bar ---- */
+.buda-statusbar {
+  display: flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-top: 1px solid
+    var(--color-border-default, rgba(0, 0, 0, 0.08));
+  font-size: 12px;
+  background: var(--color-surface-default, transparent);
+}
+
+/* ---- interactive task checkboxes in preview ---- */
+.buda-md-preview .astryx-checkbox-input {
+  cursor: pointer;
+}
+.buda-md-preview .astryx-item {
+  cursor: pointer;
+}
+
+/* ---- markdown toolbar ---- */
+.buda-md-toolbar {
+  padding: 8px 12px;
+  border-bottom: 1px solid
+    var(--color-border-default, rgba(0, 0, 0, 0.1));
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--color-surface-default, transparent);
+}
+
+/* ---- search highlight ---- */
+:is(h1, h2, h3, h4, p) mark,
+mark {
+  background: var(--buda-accent-2, #a78bfa);
+  color: #fff;
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+/* ---- compact draft recovery bar ---- */
+.buda-recover-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid
+    var(--color-border-default, rgba(0, 0, 0, 0.1));
+  background: var(--color-surface-default, transparent);
+}
